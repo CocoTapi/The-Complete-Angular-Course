@@ -1,5 +1,17 @@
+<style>
+   h2 {
+      background: pink;
+   }
+</style>
+
 <h1
-   [class.text-primary]="isFavorite" 
-   [class.text-danger]="!isFavorite"
+   [class.text-primary]="isSelected" 
+   [class.text-danger]="!isSelected"
    (click)="onClick()"
 >Star</h1>
+
+<h2
+   [class.text-primary]="isSelected" 
+   [class.text-danger]="!isSelected"
+   (click)="onClick()"
+>Star</h2>

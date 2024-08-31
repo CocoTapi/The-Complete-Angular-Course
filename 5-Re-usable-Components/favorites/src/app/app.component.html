@@ -1,8 +1,29 @@
+<h1>Hello!</h1>
+<h2>Welcome!</h2>
+
 <favorite
   [isFavorite]="post.isFavorite"
-  (change)="onFavoriteChange()"
+  (change)="onFavoriteChange($event)"
 ></favorite>
 
+<bootstrap-panel>
+  <div class="heading">Heading</div>
+  <div class="body">
+    <h2>Body</h2>
+    <p>hello world!</p>
+  </div>
+</bootstrap-panel>
 
+<bootstrap-panel>
+  <!-- ng-container remove unnecessary "div" -->
+  <ng-container class="heading">Heading</ng-container>
+  <div class="body">
+    <h2>Body</h2>
+    <p>hello world!</p>
+  </div>
+</bootstrap-panel>
 
-<!-- [is-favorite]="post.isFavorite" -->
+<like
+  [isActive]="tweet.isLiked"
+  [likesCount]="tweet.likesCount"
+></like>

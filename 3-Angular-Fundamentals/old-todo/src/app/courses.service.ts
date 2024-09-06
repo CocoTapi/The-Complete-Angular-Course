@@ -1,5 +1,9 @@
+import { Observable } from "rxjs";
+
 export class CoursesService {
-    getCourses(){
-        return ["Course1", "course2", "course3"]
+
+    protected courses: string[] = ["Course1", "course2", "course3"]
+    getCourses(): string[] {
+        return this.courses;
     }
 }

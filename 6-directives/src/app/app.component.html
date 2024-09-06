@@ -1,0 +1,130 @@
+<h1>ngIf</h1>
+<!-- approach 1 -->
+ <!-- for large element trees -->
+  <h2>approach 1</h2>
+<h1 *ngIf="courses.length > 0; then courseList else noCourses">
+  List of courses
+</h1>
+<ng-template #courseList>
+  <div>List of courses</div>
+</ng-template>
+<ng-template #noCourses>
+  No courses yet
+</ng-template>
+
+<!-- approach 2 -->
+ <!-- for small element tree -->
+  <h2>approach 2</h2>
+<div [hidden]="courses.length === 0">List of Courses</div>
+<div [hidden]="courses.length > 0">No Courses</div>
+
+<!-- approach 3 -->
+ <h2>approach 3</h2>
+<div *ngIf="courses.length > 0; else noCourses">
+  List of courses
+</div>
+<ng-template [ngIf]="courses.length > 0">
+  List of courses
+</ng-template>
+<ng-template [ngIf]="courses.length === 0">
+  No courses yet
+</ng-template>
+
+
+<!-- ngSwitch -->
+ <h1>ngSwitch</h1>
+<ul class="nav nav-pills">
+  <li class="nav-item" (click)="viewMode = 'map'; $event.preventDefault()" ><a class="nav-link" [class.active]="viewMode === 'map'" href="">Map View</a></li>
+  <li class="nav-item"(click)="viewMode = 'list'; $event.preventDefault()"><a class="nav-link" [class.active]="viewMode === 'list'"  href="">List View</a></li>
+</ul>
+<div [ngSwitch]="viewMode">
+  <div *ngSwitchCase="'map'">Map View Content</div>
+  <div *ngSwitchCase="'list'">List View Content</div>
+  <div *ngSwitchDefault>Otherwise</div>
+</div>
+
+<!-- ngFor -->
+ <h1>ngFor</h1>
+<ul>
+  <li *ngFor="let activity of activities; index as i">
+    {{i}}-{{ activity.name}}
+  </li>
+</ul>
+<ul>
+  <li *ngFor="let activity of activities; even as isEven">
+    {{ activity.name}} <span *ngIf="isEven">(EVEN)</span>
+  </li>
+</ul>
+
+<!-- add / remove activities -->
+<h1>Add activities</h1>
+<button (click)="onAdd()">ADD</button>
+<ul>
+  <li *ngFor="let activity of activities; index as i">
+     {{i}}-{{ activity.name}}
+    <button (click)="onRemove(activity)">Remove</button>
+  </li>
+</ul>
+
+<div>Load Activities</div>
+<button (click)="loadActivities()">Load courses</button>
+<ul>
+  <li *ngFor="let activity of activities; trackBy: trackActivity">
+    {{ activity.name}}
+  </li>
+</ul>
+
+<h1>ngClass</h1>
+<button 
+  type="button" 
+  class="btn"
+  [ngClass]="{
+    'btn-primary': isSelected,
+    'btn-secondary': !isSelected
+  }"
+  (click)="onClick()"
+>
+  Hello
+</button>
+
+<h1>ngStyle</h1>
+<button 
+type="button" 
+[style.backgroundColor]="canSave ? 'blue': 'grey'"
+[style.color]="canSave ? 'white' : 'black'"
+[style.fontWeight]="canSave ? 'bold' : 'normal'"
+>
+  Save
+</button>
+<button 
+type="button" 
+
+[ngStyle]="{
+  'backgroundColor': canSave ? 'blue': 'grey',
+  'color': canSave ? 'white' : 'black'
+}"
+>
+  Save
+</button>
+
+<h1>input format directive</h1>
+<!-- approach 1 -->
+<!-- <input 
+  type="text" 
+  appInputFormat
+   [format]="'uppercase'" 
+  /> -->
+
+  <!-- approach 2 -->
+  <input 
+  type="text" 
+  [appInputFormat]="'uppercase'" 
+  />
+
+<h1>Zippy</h1>
+<zippy title="Shipping Details">
+  Shipping Details Content
+</zippy>
+<zippy title="Billing Details">
+  Billing Details Content
+</zippy>

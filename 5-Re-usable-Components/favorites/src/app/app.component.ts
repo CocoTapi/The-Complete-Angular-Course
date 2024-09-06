@@ -14,8 +14,8 @@ export class AppComponent {
 
   tweet = {
     body: 'Here is the body of tweet...',
-    isLiked: true,
-    likesCount: 10
+    isLiked: false,
+    likesCount: 20
   }
 
   onFavoriteChange(eventArgs: FavoriteChangeEventArgs){

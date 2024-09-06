@@ -1,0 +1,15 @@
+<div class="card">
+    <div class="card-header d-flex justify-content-between" (click)="toggle()" >
+        <h5 class="mb-0 ">
+           {{ title }}
+        </h5>
+        <mat-icon *ngIf="!isExpanded">keyboard_arrow_down</mat-icon>
+        <mat-icon *ngIf="isExpanded">keyboard_arrow_up</mat-icon>
+    </div>
+
+    <div class="collapse show" *ngIf="isExpanded">
+        <div class="card-body">
+           <ng-content></ng-content>
+        </div>
+    </div>
+</div>

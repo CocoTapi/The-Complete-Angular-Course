@@ -1,0 +1,11 @@
+/* You can add global styles to this file, and also import other style files */
+@import url(bootstrap/dist/css/bootstrap.css);
+
+body {
+    padding: 20px;
+}
+
+//add red border to the input in there is an error
+.form-control.ng-touched.ng-invalid {
+    border: 2px solid red;
+}

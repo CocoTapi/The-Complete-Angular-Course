@@ -1,0 +1,37 @@
+<form>
+    <label for="name">Name</label>
+    <input 
+        formControlName="name" 
+        type="text" 
+        id="name"
+        class="form-control">
+    <div formGroupName="contact">
+        <label for="email">E-mail:</label>
+        <input 
+            formControlName="email" 
+            type="text" 
+            id="email"
+            class="form-control">
+        <label for="phone">Phone Number:</label>
+        <input 
+            formControlName="phone" 
+            type="text" 
+            id="phone"
+            class="form-control">
+    </div>
+    <label for="topics">Topics</label>
+    <input 
+        type="text"
+        class="form-control"
+        id="topics"
+        (keydown.enter)="addTopic(topic)" 
+        #topic >
+    <ul>
+        <li 
+        *ngFor="let topic of topics.controls; let i = index"
+            (click)="removeTopic(i)"
+            class="list-group-item">
+            {{topic.value}}
+        </li>
+    </ul>
+</form>

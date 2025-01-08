@@ -5,6 +5,7 @@ import { PostService } from '../services/post.service';
 import { AppError } from '../common/app.error';
 import { NotFoundError } from '../common/not-found-error';
 import { PostResponse } from '../common/types';
+import { BadInputError } from '../common/bad-input.error';
 
 @Component({
   selector: 'post',
@@ -77,8 +78,8 @@ export class PostComponent implements OnInit {
         this.posts.splice(0, 0, post)
       },
       error: (err: AppError) => {
-        if(err instanceof NotFoundError){
-          alert('This post has already been deleted.')
+        if(err instanceof BadInputError){
+          //this.form.setErrors(err.originalError);
         } else {
           alert('An unexpected error occurred.');
           console.error('Error fetching posts:', err);

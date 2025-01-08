@@ -2,6 +2,9 @@ import { NgFor } from '@angular/common';
 // import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { PostService } from '../services/post.service';
+import { AppError } from '../common/app.error';
+import { NotFoundError } from '../common/not-found-error';
+import { PostResponse } from '../common/types';
 
 @Component({
   selector: 'post',
@@ -25,8 +28,9 @@ export class PostComponent implements OnInit {
         console.log('Posts fetched:', response);
         this.posts = response; // Assign response to posts
       },
-      error: (err) => {
-        console.error('Error fetching posts:', err); // Handle errors
+      error: (err: Response) => {
+        alert('An unexpected error occurred.');
+        console.error('Error fetching posts:', err); // this would be shown only in client side so need to store in different way
       },
       complete: () => {
         console.log('HTTP request completed.'); // Optional
@@ -65,11 +69,20 @@ export class PostComponent implements OnInit {
   createPost(input: HTMLInputElement){
     let post: any = { title: input.value };
     input.value = '';
+
     this.service.createPost(post).subscribe({
-      next: (response) => {
+      next: (response: PostResponse) => {
         console.log(response);
         post.id = response.id;
         this.posts.splice(0, 0, post)
+      },
+      error: (err: AppError) => {
+        if(err instanceof NotFoundError){
+          alert('This post has already been deleted.')
+        } else {
+          alert('An unexpected error occurred.');
+          console.error('Error fetching posts:', err);
+        }
       }
     })
   }
@@ -89,8 +102,15 @@ export class PostComponent implements OnInit {
         let index = this.posts.indexOf(post);
         //if you send only id, 
         // let index = this.posts.findIndex(post => post.id === postId)
-        console.log(index)
         this.posts.splice(index, 1);
+      },
+      error: (err: AppError) => {
+        if(err instanceof NotFoundError){
+          alert('This post has already been deleted.')
+        } else {
+          alert('An unexpected error occurred.');
+          console.error('Error fetching posts:', err);
+        }
       }
     })
   }

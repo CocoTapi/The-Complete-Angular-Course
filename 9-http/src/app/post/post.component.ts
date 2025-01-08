@@ -45,16 +45,36 @@ export class PostComponent {
     );
   }
 
-  
-
   createPost(input: HTMLInputElement){
     let post: any = { title: input.value };
-    
+    input.value = '';
+
     this.http.post<PostResponse>(this.url, JSON.stringify(post)).subscribe({
       next: (response) => {
         console.log(response);
         post.id = response.id;
         this.posts.splice(0, 0, post)
+      }
+    })
+  }
+
+  updatePost(post: HTMLInputElement){
+    this.http.patch(this.url + '/' + post.id, JSON.stringify({ isRead: true })).subscribe({
+      next: (response) => {
+        console.log("patch request submitted:", response);
+      }
+    })
+  }
+
+  deletePost(post: HTMLInputElement){
+    this.http.delete(this.url + '/' + post.id).subscribe({
+      next: (response) => {
+        console.log("delete request submitted:", response);
+        let index = this.posts.indexOf(post);
+        //if you send only id, 
+        // let index = this.posts.findIndex(post => post.id === postId)
+        console.log(index)
+        this.posts.splice(index, 1);
       }
     })
   }

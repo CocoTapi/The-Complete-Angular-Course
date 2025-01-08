@@ -1,6 +1,7 @@
 import { NgFor } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+// import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { PostService } from '../services/post.service';
 
 @Component({
   selector: 'post',
@@ -9,19 +10,17 @@ import { Component } from '@angular/core';
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss'
 })
-export class PostComponent {
+export class PostComponent implements OnInit {
   posts: any[] = [];
-  private url = 'https://jsonplaceholder.typicode.com/posts'
+  // private url = 'https://jsonplaceholder.typicode.com/posts'
 
  // Use private to assign HttpClient to the class property
- constructor(private http: HttpClient) {
-  // Call the fetchPosts method
-  this.fetchPosts();
+  constructor(private service: PostService) {
+   //Do not call fetch request here
   }
 
-  // Fetch posts using a separate method for clarity
-  fetchPosts(): void {
-    this.http.get<any[]>(this.url).subscribe({
+  ngOnInit(): void {
+    this.service.getPosts().subscribe({
       next: (response) => {
         console.log('Posts fetched:', response);
         this.posts = response; // Assign response to posts
@@ -32,24 +31,41 @@ export class PostComponent {
       complete: () => {
         console.log('HTTP request completed.'); // Optional
       }
-    }
-      /*
-      this is old way
-      (response) => {
-      this.posts = response; // Assign the response directly to the posts array
-      },
-      (error) => {
-      console.error('Error fetching posts:', error); // Handle errors if any
-      }
-      */
-    );
+    })
+
+    // this.fetchPosts();
   }
+
+  // Fetch posts using a separate method for clarity
+  // fetchPosts(): void {
+  //   this.http.get<any[]>(this.url).subscribe({
+      // next: (response) => {
+      //   console.log('Posts fetched:', response);
+      //   this.posts = response; // Assign response to posts
+      // },
+      // error: (err) => {
+      //   console.error('Error fetching posts:', err); // Handle errors
+      // },
+      // complete: () => {
+      //   console.log('HTTP request completed.'); // Optional
+      // }
+  //   }
+  //     /*
+  //     this is old way
+  //     (response) => {
+  //     this.posts = response; // Assign the response directly to the posts array
+  //     },
+  //     (error) => {
+  //     console.error('Error fetching posts:', error); // Handle errors if any
+  //     }
+  //     */
+  //   );
+  // }
 
   createPost(input: HTMLInputElement){
     let post: any = { title: input.value };
     input.value = '';
-
-    this.http.post<PostResponse>(this.url, JSON.stringify(post)).subscribe({
+    this.service.createPost(post).subscribe({
       next: (response) => {
         console.log(response);
         post.id = response.id;
@@ -59,7 +75,7 @@ export class PostComponent {
   }
 
   updatePost(post: HTMLInputElement){
-    this.http.patch(this.url + '/' + post.id, JSON.stringify({ isRead: true })).subscribe({
+    this.service.updatePost(post).subscribe({
       next: (response) => {
         console.log("patch request submitted:", response);
       }
@@ -67,7 +83,7 @@ export class PostComponent {
   }
 
   deletePost(post: HTMLInputElement){
-    this.http.delete(this.url + '/' + post.id).subscribe({
+   this.service.deletePost(parseInt(post.id)).subscribe({
       next: (response) => {
         console.log("delete request submitted:", response);
         let index = this.posts.indexOf(post);
@@ -80,6 +96,4 @@ export class PostComponent {
   }
 }
 
-interface PostResponse {
-  id: number;
-}
+

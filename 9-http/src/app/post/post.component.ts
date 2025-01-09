@@ -24,14 +24,10 @@ export class PostComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.service.getPosts().subscribe({
+    this.service.getAll().subscribe({
       next: (response) => {
         console.log('Posts fetched:', response);
         this.posts = response; // Assign response to posts
-      },
-      error: (err: Response) => {
-        alert('An unexpected error occurred.');
-        console.error('Error fetching posts:', err); // this would be shown only in client side so need to store in different way
       },
       complete: () => {
         console.log('HTTP request completed.'); // Optional
@@ -69,27 +65,32 @@ export class PostComponent implements OnInit {
 
   createPost(input: HTMLInputElement){
     let post: any = { title: input.value };
+    //optimistic update
+    this.posts.splice(0, 0, post)
+
     input.value = '';
 
-    this.service.createPost(post).subscribe({
+    this.service.create(post).subscribe({
       next: (response: PostResponse) => {
         console.log(response);
         post.id = response.id;
-        this.posts.splice(0, 0, post)
+        // this.posts.splice(0, 0, post)
       },
       error: (err: AppError) => {
+        //when optimistic update failed
+        this.posts.splice(0, 1)
+
         if(err instanceof BadInputError){
           //this.form.setErrors(err.originalError);
         } else {
-          alert('An unexpected error occurred.');
-          console.error('Error fetching posts:', err);
+          throw err;
         }
       }
     })
   }
 
   updatePost(post: HTMLInputElement){
-    this.service.updatePost(post).subscribe({
+    this.service.update(post).subscribe({
       next: (response) => {
         console.log("patch request submitted:", response);
       }
@@ -97,20 +98,25 @@ export class PostComponent implements OnInit {
   }
 
   deletePost(post: HTMLInputElement){
-   this.service.deletePost(parseInt(post.id)).subscribe({
+    //optimistic update
+    let index = this.posts.indexOf(post);
+    this.posts.splice(index, 1);
+
+   this.service.delete(parseInt(post.id)).subscribe({
       next: (response) => {
         console.log("delete request submitted:", response);
-        let index = this.posts.indexOf(post);
-        //if you send only id, 
-        // let index = this.posts.findIndex(post => post.id === postId)
-        this.posts.splice(index, 1);
+        // let index = this.posts.indexOf(post);
+        // //if you send only id, 
+        // // let index = this.posts.findIndex(post => post.id === postId)
+        // this.posts.splice(index, 1);
       },
       error: (err: AppError) => {
+        //when optimistic update failed
+        this.posts.splice(index, 0, post);
         if(err instanceof NotFoundError){
           alert('This post has already been deleted.')
         } else {
-          alert('An unexpected error occurred.');
-          console.error('Error fetching posts:', err);
+          throw err;
         }
       }
     })

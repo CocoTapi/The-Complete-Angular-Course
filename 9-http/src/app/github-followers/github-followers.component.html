@@ -1,0 +1,15 @@
+<ul class="list-unstyled">
+    <li 
+        *ngFor="let follower of followers" 
+        class="media"  
+    >
+      <img class="mr-3" src="..." alt="Generic placeholder image">
+      <div class="media-body">
+        <h5 class="mt-0 mb-1">{{ follower.name }}</h5>
+        {{ follower.company.catchPhrase }}
+        <a href="">
+            {{ follower.email }}
+        </a>
+      </div>
+    </li>
+</ul>
